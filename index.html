@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NID রিপোর্ট</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    body {
+      font-family: 'Noto Sans Bengali', sans-serif;
+      background: #f0f0f0;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 750px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: green;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .report {
+      display: flex;
+      margin-top: 20px;
+    }
+
+    .left img {
+      width: 150px;
+      border: 2px solid #444;
+    }
+
+    .right {
+      margin-left: 20px;
+    }
+
+    .qr img {
+      margin-top: 20px;
+      width: 150px;
+    }
+
+    .qr {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>জাতীয় পরিচয়পত্র যাচাই</h1>
+    <form id="nidForm">
+      <input type="text" id="nid" placeholder="NID নম্বর" required>
+      <input type="date" id="dob" required>
+      <button type="submit">তথ্য দেখুন</button>
+    </form>
+
+    <div id="output" style="display:none">
+      <div class="report">
+        <div class="left">
+          <img id="photo" src="" alt="ছবি">
+        </div>
+        <div class="right">
+          <p><strong>নাম (বাংলা):</strong> <span id="nameBangla"></span></p>
+          <p><strong>নাম (ইংরেজি):</strong> <span id="nameEnglish"></span></p>
+          <p><strong>জন্ম তারিখ:</strong> <span id="dateOfBirth"></span></p>
+          <p><strong>লিঙ্গ:</strong> <span id="gender"></span></p>
+          <p><strong>ধর্ম:</strong> <span id="religion"></span></p>
+          <p><strong>রক্তের গ্রুপ:</strong> <span id="bloodGroup"></span></p>
+          <p><strong>পিতার নাম:</strong> <span id="fatherName"></span></p>
+          <p><strong>মাতার নাম:</strong> <span id="motherName"></span></p>
+          <p><strong>ঠিকানা:</strong> <span id="preAddress"></span></p>
+        </div>
+      </div>
+      <div class="qr">
+        <img id="qrImage" src="" alt="QR কোড">
+      </div>
+      <div style="text-align:center; margin-top:20px;">
+        <button onclick="downloadPDF()">📄 রিপোর্ট ডাউনলোড করুন</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('nidForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const nid = document.getElementById('nid').value;
+      const dob = document.getElementById('dob').value;
+      const url = `https://unique-seba.com/api/servercopy2?api_key=1e0fc13be94e217f1ec34da77f2b4e83&nid=${nid}&dob=${dob}`;
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+
+        document.getElementById('nameBangla').innerText = data.nameBangla;
+        document.getElementById('nameEnglish').innerText = data.nameEnglish;
+        document.getElementById('dateOfBirth').innerText = data.dateOfBirth;
+        document.getElementById('gender').innerText = data.gender;
+        document.getElementById('religion').innerText = data.religion;
+        document.getElementById('bloodGroup').innerText = data.bloodGroup;
+        document.getElementById('fatherName').innerText = data.fatherName;
+        document.getElementById('motherName').innerText = data.motherName;
+        document.getElementById('photo').src = data.photo;
+        document.getElementById('preAddress').innerText = data.preAddress.addressLine;
+
+        const qr = `https://api.qrserver.com/v1/create-qr-code/?data=NID:${data.nationalId}, Name:${data.nameEnglish}&size=150x150`;
+        document.getElementById('qrImage').src = qr;
+
+        document.getElementById('output').style.display = 'block';
+      } catch (err) {
+        alert("ডাটা পাওয়া যায়নি। NID বা DOB ভুল হতে পারে!");
+      }
+    });
+
+    function downloadPDF() {
+      const element = document.getElementById('output');
+      html2pdf().from(element).save("nid-report.pdf");
+    }
+  </script>
+</body>
+</html>
