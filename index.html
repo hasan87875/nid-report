@@ -1,21 +1,3 @@
-সবকিছু ঠিক করে, অর্থাৎ আপনার API থেকে পাওয়া সম্ভাব্য সকল তথ্য (যেমন, পিন নম্বর) এবং আপনার দেওয়া ইমেজের ফরম্যাট অনুযায়ী একটি সম্পূর্ণ এবং চূড়ান্ত HTML ফাইল নিচে দেওয়া হলো। এই কোডটিতে HTML, CSS এবং JavaScript সবই একসাথে আছে।
-
-এটি একটি একক ফাইল, তাই কোনো অতিরিক্ত ফাইল বা ফোল্ডারের প্রয়োজন নেই।
-
-**ব্যবহার করার পদ্ধতি:**
-
-1.  নিচের সম্পূর্ণ কোডটি কপি করুন।
-2.  আপনার কম্পিউটারে একটি নতুন ফাইল তৈরি করুন এবং এর নাম দিন `index.html`।
-3.  কপি করা কোডটি ওই ফাইলে পেস্ট করুন।
-4.  ফাইলটি সেভ করুন।
-5.  আপনার পছন্দের যেকোনো ব্রাউজারে `index.html` ফাইলটি খুলুন।
-
-এই কোডটি আপনার দেওয়া API (`https://unique-seba.com/api/servercopy2`) ব্যবহার করে তথ্য লোড করবে এবং আপনার দেখানো ফরম্যাটে একটি PDF ডাউনলোড করার সুযোগ দেবে।
-
------
-
-### **চূড়ান্ত `index.html` ফাইল**
-
 ```html
 <!DOCTYPE html>
 <html lang="bn">
@@ -367,7 +349,7 @@
             resultContainer.style.display = 'none';
             searchBtn.disabled = true;
 
-            const apiUrl = `https://unique-seba.com/api/servercopy2?api_key=${api_key}&nid=${nid}&dob=${dob}`;
+            const apiUrl = `https://unique-seba.com/api/servercopy2?api_key=61c3c057309265bd0f26a42d06f75f82&nid=7355243812&dob=1999-11-11`;
 
             try {
                 const response = await fetch(apiUrl);
